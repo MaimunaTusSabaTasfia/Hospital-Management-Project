@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Doldam Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-card {
+      max-width: 420px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .card-header {
+      background: #0D273D;
+      padding: 30px;
+      text-align: center;
+    }
+    .card-header h1 { color: white; font-size: 1.8rem; margin-top: 10px; }
+    .card-header p { color: #7bc5e8; font-size: 0.85rem; margin-top: 5px; }
+    .card-header .dashboard-link { margin-top: 12px; color: #d6eaff; font-size: 0.82rem; }
+    .card-header .dashboard-link a { color: #f1f9ff; text-decoration: underline; }
+    .card-header i { font-size: 3rem; color: #7bc5e8; }
+    .card-body { padding: 35px; }
+    .input-group { margin-bottom: 22px; }
+    .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #0D273D; }
+    .input-group i { margin-right: 8px; color: #2c9cd4; }
+    .input-group input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      font-size: 1rem;
+    }
+    .input-group input:focus { outline: none; border-color: #2c9cd4; }
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: #0D273D;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .login-btn:hover { background: #1a4a6e; }
+    .back-link { text-align: center; margin-top: 20px; }
+    .back-link a { color: #5a7e9a; text-decoration: none; font-size: 0.8rem; }
+    .error-msg {
+      background: #fee;
+      color: #c0392b;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    .footer-note {
+      background: #f8f9fa;
+      padding: 15px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+<div id="serverWarning" class="warning-banner" style="display:none;"></div>
+<div class="login-card">
+  <div class="card-header">
+    <i class="fas fa-user-cog"></i>
+    <h1>Admin Portal</h1>
+    <p>System management & oversight</p>
+    
+  </div>
+  <div class="card-body">
+    <div id="errorMsg" class="error-msg"></div>
+    <form id="adminLoginForm" action="http://127.0.0.1:8000/login/?next=http://127.0.0.1:5500/admin-dashboard.html" method="post">
+      <input type="hidden" name="next" value="http://127.0.0.1:5500/admin-dashboard.html">
+      <div class="input-group">
+        <label><i class="fas fa-user"></i> Username or Email</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
+      </div>
+      <div class="input-group">
+        <label><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </form>
+    <div class="back-link"><a href="http://127.0.0.1:8000/index.html"><i class="fas fa-arrow-left"></i> Back to Home</a></div>
+  </div>
+  <div class="footer-note"><i class="fas fa-shield-alt"></i> Secure & Encrypted | Doldam Hospital</div>
+</div>
+
+<script>
+  const warningEl = document.getElementById('serverWarning');
+  const adminForm = document.getElementById('adminLoginForm');
+  if (!['http:', 'https:'].includes(window.location.protocol)) {
+    warningEl.innerText = 'Warning: this page must be opened through the Django server, for example http://127.0.0.1:8000/admin.html';
+    warningEl.style.display = 'block';
+    adminForm.addEventListener('submit', function(event) { event.preventDefault(); });
+  }
+</script>
+</body>
+</html>

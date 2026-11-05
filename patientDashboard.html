@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Dashboard | Doldam Hospital</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #e0f7fa, #f1f8e9); padding: 20px; }
+    .container { max-width: 1200px; margin: auto; }
+    header { background: #0D273D; color: white; padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+    button { background: #2c9cd4; color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; margin: 5px; }
+    .logout-btn { background: #c0392b; }
+    .card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: #0D273D; color: white; }
+    input, textarea, select { padding: 10px; margin: 5px; border-radius: 10px; border: 1px solid #ccc; width: 200px; }
+    .flex { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    h2, h3 { color: #0D273D; }
+    a { color: white; text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h2><i class="fas fa-user-injured"></i> Patient Dashboard</h2>
+    <div>
+      <button onclick="window.location.href='index.html'">🏠 Home</button>
+      <button id="logoutBtn" class="logout-btn">🚪 Logout</button>
+    </div>
+  </header>
+
+  <div class="card"><h3>📋 My Profile</h3><div id="patientProfile"></div></div>
+  <div class="card"><h3>📊 My Activity</h3><canvas id="patientChart" width="400" height="200"></canvas></div>
+  <div class="card"><h3>👨‍⚕️ Available Doctors</h3><table id="doctorsTable"><thead><tr><th>Name</th><th>Speciality</th><th>Qualification</th><th>Working Days</th><th>Action</th></tr></thead><tbody></tbody></table></div>
+  <div class="card"><h3>📄 My Reports & Prescriptions</h3><p id="myReports"></p><p id="myPrescription"></p></div>
+  <div class="card"><h3>💰 My Bill</h3><p id="myBill"></p><div class="flex"><select id="paymentMethod"><option>Cash</option><option>Bkash</option><option>Rocket</option><option>Nagad</option></select><button id="payBillBtn">Pay Now</button></div></div>
+  <div class="card"><h3>⚕️ Request Operation</h3><form id="operationForm" class="flex"><input type="text" id="operationDoctor" placeholder="Doctor Username"><textarea id="operationDetails" placeholder="Operation Details" rows="2" cols="30"></textarea><button type="submit">Request</button></form><h4>My Operation Requests</h4><table id="operationTable"><thead><tr><th>Doctor</th><th>Details</th><th>Status</th><tr></thead><tbody></tbody></table></div>
+  <div class="card"><h3>💊 Pharmacy</h3><table id="medicineTable"><thead><tr><th>Medicine</th><th>Price</th><th>Action</th></tr></thead><tbody></tbody></table><h4>My Purchases</h4><ul id="myMedicines"></ul></div>
+</div>
+
+<script src="patient.js"></script>
+</body>
+</html>

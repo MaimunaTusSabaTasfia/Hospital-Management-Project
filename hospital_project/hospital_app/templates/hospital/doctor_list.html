@@ -1,0 +1,186 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Doctors - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="doctors-page">
+    <div class="page-header">
+        <h1><i class="fas fa-stethoscope"></i> Our Doctors</h1>
+        <p>Find and consult with our experienced medical professionals</p>
+    </div>
+
+    <div class="doctors-container">
+        <div class="filter-sidebar">
+            <h3>Filter by Specialization</h3>
+            <form method="get" class="filter-form">
+                <div class="form-group">
+                    <input type="text" name="specialization" placeholder="Search specialization" 
+                           value="{{ request.GET.specialization }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        <div class="doctors-grid">
+            {% if doctors %}
+                {% for doctor in doctors %}
+                    <div class="doctor-card">
+                        <div class="doctor-header">
+                            <h2>Dr. {{ doctor.user.get_full_name }}</h2>
+                            <p class="specialization">{{ doctor.specialization }}</p>
+                        </div>
+                        
+                        <div class="doctor-details">
+                            <p><strong><i class="fas fa-award"></i> License:</strong> {{ doctor.license_number }}</p>
+                            <p><strong><i class="fas fa-briefcase"></i> Experience:</strong> {{ doctor.experience_years }} years</p>
+                            <p><strong><i class="fas fa-money-bill"></i> Consultation Fee:</strong> ₩ {{ doctor.consultation_fee }}</p>
+                            <p>
+                                <strong><i class="fas fa-clock"></i> Availability:</strong>
+                                {% if doctor.availability_status %}
+                                    <span class="badge badge-available">Available</span>
+                                {% else %}
+                                    <span class="badge badge-unavailable">Unavailable</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        
+                        {% if doctor.bio %}
+                            <p class="doctor-bio">{{ doctor.bio|truncatewords:30 }}</p>
+                        {% endif %}
+                        
+                        <div class="doctor-actions">
+                            <a href="{% url 'doctor_detail' doctor.pk %}" class="btn btn-outline">
+                                <i class="fas fa-eye"></i> View Profile
+                            </a>
+                            {% if user.is_authenticated and user.role == 'patient' %}
+                                <a href="{% url 'book_appointment' %}?doctor={{ doctor.pk }}" class="btn btn-primary">
+                                    <i class="fas fa-calendar-plus"></i> Book Appointment
+                                </a>
+                            {% elif not user.is_authenticated %}
+                                <a href="{% url 'patient_register' %}" class="btn btn-primary">
+                                    <i class="fas fa-user-plus"></i> Register to Book
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data" style="grid-column: 1/-1;">
+                    <p>No doctors found matching your criteria.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .doctors-page {
+        padding: 30px 0;
+    }
+    
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+        color: #0D273D;
+        margin-bottom: 10px;
+    }
+    
+    .doctors-container {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 30px;
+    }
+    
+    .filter-sidebar {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        height: fit-content;
+    }
+    
+    .filter-sidebar h3 {
+        color: #0D273D;
+        margin-bottom: 15px;
+    }
+    
+    .doctors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .doctor-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .doctor-header {
+        background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+        color: white;
+        padding: 20px;
+    }
+    
+    .doctor-header h2 {
+        margin: 0;
+        font-size: 1.3rem;
+    }
+    
+    .specialization {
+        color: #7bc5e8;
+        margin: 8px 0 0 0;
+        font-size: 0.9rem;
+    }
+    
+    .doctor-details {
+        padding: 20px;
+        flex: 1;
+    }
+    
+    .doctor-details p {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+    
+    .doctor-bio {
+        padding: 0 20px;
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .doctor-actions {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        border-top: 1px solid #eee;
+    }
+    
+    @media (max-width: 768px) {
+        .doctors-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .doctors-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Admin Dashboard — Doldam Hospital</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+/* Small extra admin-specific tweaks */
+.topbar { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
+.controls { display:flex; gap:8px; flex-wrap:wrap; }
+.panel { margin-bottom:18px; }
+.small-btn { padding:6px 8px; font-size:0.9rem; border-radius:6px; }
+.danger { background:#e53935; color:#fff; }
+.muted { color:#666; font-size:0.9rem; }
+.two-col { display:grid; grid-template-columns: 1fr 420px; gap:18px; align-items:start; }
+@media(max-width:1000px){ .two-col{ grid-template-columns: 1fr; } }
+.table-wrap { overflow:auto; max-height:360px; }
+.form-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.form-row input, .form-row select { padding:8px; border-radius:6px; border:1px solid #ccc; }
+</style>
+</head>
+<body>
+<header>
+<h1>Admin Dashboard — Doldam Hospital</h1>
+<p class="muted">Logged in as <strong>Admin</strong></p>
+</header>
+
+<main class="container">
+<div class="topbar">
+<div class="controls">
+<button id="btnRefresh" class="small-btn">Refresh</button>
+<button id="btnExport" class="small-btn">Export All Data (JSON)</button>
+<button id="btnLogout" class="small-btn danger">Logout</button>
+</div>
+<div class="muted">Admin: you can add users, approve staff/nurses & view everything.</div>
+</div>
+
+<div class="two-col">
+<!-- left column -->
+<div>
+<!-- Quick summary chart -->
+<section class="panel">
+<h2>Hospital Summary</h2>
+<canvas id="summaryChart" height="120"></canvas>
+</section>
+
+<!-- Doctors -->
+<section class="panel">
+<h2>Doctors — Add / Manage</h2>
+<form id="addDoctorForm">
+<div class="form-row">
+<input id="d_name" placeholder="Name" required>
+<input id="d_username" placeholder="Username" required>
+<input id="d_password" placeholder="Password" required>
+</div>
+<div class="form-row">
+<input id="d_qualification" placeholder="Qualification (MBBS, MD...)" required>
+<input id="d_speciality" placeholder="Speciality (Cardio, Neurology...)" required>
+<input id="d_workingDays" placeholder="Working days (Mon-Fri)"/>
+</div>
+<div class="form-row">
+<input id="d_picture" placeholder="Picture URL (optional)">
+<button type="submit" class="small-btn">Add Doctor</button>
+</div>
+</form>
+<div class="table-wrap">
+<table id="doctorsTable" class="data-table">
+<thead><tr><th>Name</th><th>Username</th><th>Qualification</th><th>Speciality</th><th>Working Days</th><th>Avail</th><th>Action</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+
+<!-- Patients -->
+<section class="panel">
+<h2>Patients — Add / Manage</h2>
+<form id="addPatientForm">
+<div class="form-row">
+<input id="p_name" placeholder="Name" required>
+<input id="p_username" placeholder="Username" required>
+<input id="p_password" placeholder="Password" required>
+</div>
+<div class="form-row">
+<input id="p_age" placeholder="Age" type="number">
+<input id="p_problem" placeholder="Problem/Reason">
+<input id="p_picture" placeholder="Picture URL (optional)">
+</div>
+<div class="form-row">
+<button type="submit" class="small-btn">Add Patient</button>
+</div>
+</form>
+<div class="table-wrap">
+<table id="patientsTable" class="data-table">
+<thead><tr><th>Name</th><th>Username</th><th>Age</th><th>Problem</th><th>Bill</th><th>Paid?</th><th>Action</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+
+<!-- Staff & Nurse Applications -->
+<section class="panel">
+<h2>Staff & Nurse Applications</h2>
+<div style="display:flex; gap:12px; flex-wrap:wrap">
+<div style="flex:1">
+<h3>Staff Applications</h3>
+<div class="table-wrap">
+<table id="staffAppsTable" class="data-table">
+<thead><tr><th>Name</th><th>Qualification</th><th>Work Part</th><th>Days</th><th>Status</th><th>Action</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
+<div style="flex:1">
+<h3>Nurse Applications</h3>
+<div class="table-wrap">
+<table id="nurseAppsTable" class="data-table">
+<thead><tr><th>Name</th><th>Qualification</th><th>Experience</th><th>Days</th><th>Status</th><th>Action</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Appointments -->
+<section class="panel">
+<h2>Appointments</h2>
+<div class="table-wrap">
+<table id="appointmentsTable" class="data-table">
+<thead><tr><th>Patient</th><th>Doctor</th><th>Date/Time</th><th>Notes</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+
+<!-- Operations -->
+<section class="panel">
+<h2>Operations</h2>
+<div class="table-wrap">
+<table id="operationsTable" class="data-table">
+<thead><tr><th>Patient</th><th>Doctor</th><th>Status</th><th>Action</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+
+<!-- Bills -->
+<section class="panel">
+<h2>Bills & Payments</h2>
+<div class="table-wrap">
+<table id="billsTable" class="data-table">
+<thead><tr><th>Patient</th><th>Amount</th><th>Status</th><th>Method</th><th>Action</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+
+<!-- Contact Messages -->
+<section class="panel">
+<h2>Contact Messages</h2>
+<div class="table-wrap">
+<table id="contactsTable" class="data-table">
+<thead><tr><th>Name</th><th>Email</th><th>Message</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+
+</div> <!-- end left column -->
+
+<!-- right column -->
+<aside>
+<section class="panel">
+<h2>Medicine Stock</h2>
+<form id="addMedicineForm">
+<div class="form-row">
+<input id="m_name" placeholder="Medicine name" required>
+<input id="m_price" placeholder="Price" type="number" required>
+</div>
+<div class="form-row">
+<input id="m_qty" placeholder="Quantity" type="number" required>
+<button type="submit" class="small-btn">Add / Update</button>
+</div>
+</form>
+<div class="table-wrap">
+<table id="medicinesTable" class="data-table">
+<thead><tr><th>Name</th><th>Price</th><th>Quantity</th><th>Action</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+
+<section class="panel">
+<h2>Quick Counts</h2>
+<ul>
+<li id="countDoctors">Doctors: 0</li>
+<li id="countPatients">Patients: 0</li>
+<li id="countStaff">Staff: 0</li>
+<li id="countNurses">Nurses: 0</li>
+<li id="countMedicines">Medicines: 0</li>
+</ul>
+</section>
+
+<section class="panel">
+<h2>Admin Actions</h2>
+<div style="display:flex; flex-direction:column; gap:8px">
+<button id="btnClearData" class="small-btn danger">Clear All Demo Data</button>
+<button id="btnSeedExample" class="small-btn">Seed Example Data</button>
+</div>
+</section>
+</aside>
+
+</div>
+</main>
+
+<footer style="text-align:center;margin-top:18px;">
+<small>Doldam Hospital — Admin panel</small>
+</footer>
+
+<script src="admin.js"></script>
+</body>
+</html>

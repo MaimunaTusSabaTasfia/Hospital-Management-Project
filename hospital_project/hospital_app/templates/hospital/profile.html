@@ -1,0 +1,196 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Profile - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="page-header">
+        <h1><i class="fas fa-user-circle"></i> My Profile</h1>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="profile-info">
+                <h2>{{ user.get_full_name }}</h2>
+                <p class="role">{{ user.get_role_display }}</p>
+                <p class="email">{{ user.email }}</p>
+            </div>
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Edit Profile
+            </a>
+        </div>
+
+        <div class="profile-details">
+            <div class="detail-section">
+                <h3>Personal Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>First Name</label>
+                        <p>{{ user.first_name|default:"Not set" }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Last Name</label>
+                        <p>{{ user.last_name|default:"Not set" }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Email</label>
+                        <p>{{ user.email }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Phone</label>
+                        <p>{{ user.phone|default:"Not set" }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Date of Birth</label>
+                        <p>{{ user.date_of_birth|date:"M d, Y"|default:"Not set" }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>City</label>
+                        <p>{{ user.city|default:"Not set" }}</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if patient %}
+                <div class="detail-section">
+                    <h3>Patient Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Patient ID</label>
+                            <p>{{ patient.patient_id }}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Blood Type</label>
+                            <p>{{ patient.blood_type|default:"Not set" }}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Insurance Provider</label>
+                            <p>{{ patient.insurance_provider|default:"Not set" }}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Insurance Number</label>
+                            <p>{{ patient.insurance_number|default:"Not set" }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if doctor %}
+                <div class="detail-section">
+                    <h3>Doctor Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Doctor ID</label>
+                            <p>{{ doctor.doctor_id }}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Specialization</label>
+                            <p>{{ doctor.specialization }}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>License Number</label>
+                            <p>{{ doctor.license_number }}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Experience</label>
+                            <p>{{ doctor.experience_years }} years</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-page {
+        padding: 30px 0;
+    }
+    
+    .profile-header {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 30px;
+        align-items: center;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .profile-avatar {
+        font-size: 4rem;
+        color: #2c9cd4;
+    }
+    
+    .profile-info h2 {
+        color: #0D273D;
+        margin: 0 0 5px 0;
+    }
+    
+    .role {
+        color: #2c9cd4;
+        font-weight: 600;
+        text-transform: capitalize;
+        margin: 5px 0;
+    }
+    
+    .email {
+        color: #666;
+    }
+    
+    .profile-details {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .detail-section {
+        padding: 30px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .detail-section:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-section h3 {
+        color: #0D273D;
+        margin: 0 0 20px 0;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .info-item {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+    
+    .info-item label {
+        display: block;
+        color: #666;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+    }
+    
+    .info-item p {
+        color: #0D273D;
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}

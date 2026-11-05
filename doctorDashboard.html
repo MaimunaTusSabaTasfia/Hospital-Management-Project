@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Dashboard - Doldam Hospital</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: linear-gradient(135deg, #e0f7fa, #f1f8e9); }
+    .container { max-width: 800px; margin: auto; }
+    header { background: #0D273D; color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .card { background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    button { background: #c0392b; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+    button:hover { background: #a93226; }
+    .success { color: green; font-size: 18px; margin-bottom: 15px; }
+    h2, h3 { color: #0D273D; }
+    .info p { margin: 8px 0; font-size: 16px; }
+    a { color: white; text-decoration: none; background: #2c9cd4; padding: 8px 16px; border-radius: 8px; }
+    a:hover { background: #1a7ab0; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h2>👨‍⚕️ Doctor Dashboard</h2>
+    <button onclick="logout()">Logout</button>
+  </header>
+
+  <div class="card" id="dashboardCard">
+    <div class="success">✅ LOGIN SUCCESSFUL!</div>
+    <div id="profile"></div>
+  </div>
+
+  <div class="card">
+    <h3>📊 Quick Stats</h3>
+    <p>Welcome to your dashboard! Here you can:</p>
+    <ul>
+      <li>View your patient appointments</li>
+      <li>Upload prescriptions and reports</li>
+      <li>Manage operation requests</li>
+      <li>Track your performance</li>
+    </ul>
+  </div>
+
+  <div style="text-align: center;">
+    <a href="index.html">← Back to Homepage</a>
+  </div>
+</div>
+
+<script>
+  const doctor = JSON.parse(localStorage.getItem('loggedDoctor'));
+  if (!doctor) {
+    alert('Please login first');
+    window.location.href = 'doctor.html';
+  } else {
+    document.getElementById('profile').innerHTML = `
+      <p><strong>Name:</strong> ${doctor.name}</p>
+      <p><strong>Username:</strong> ${doctor.username}</p>
+      <p><strong>Qualification:</strong> ${doctor.qualification || 'N/A'}</p>
+      <p><strong>Speciality:</strong> ${doctor.speciality || 'N/A'}</p>
+      <p><strong>Working Days:</strong> ${doctor.workingDays || 'N/A'}</p>
+    `;
+  }
+
+  function logout() {
+    localStorage.removeItem('loggedDoctor');
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>

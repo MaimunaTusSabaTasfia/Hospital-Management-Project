@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nurse Portal | Doldam Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-card {
+      max-width: 450px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .card-header {
+      background: #0D273D;
+      padding: 30px;
+      text-align: center;
+    }
+    .card-header h1 { color: white; font-size: 1.8rem; margin-top: 10px; }
+    .card-header p { color: #7bc5e8; font-size: 0.85rem; margin-top: 5px; }
+    .card-header i { font-size: 3rem; color: #7bc5e8; }
+    .card-body { padding: 35px; }
+    .input-group { margin-bottom: 22px; }
+    .input-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #0D273D; }
+    .input-group i { margin-right: 8px; color: #2c9cd4; }
+    .input-group input { width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 16px; font-size: 1rem; }
+    .input-group input:focus { outline: none; border-color: #2c9cd4; }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: #0D273D;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover { background: #1a4a6e; }
+    .btn-secondary { background: #2c9cd4; margin-top: 10px; }
+    .divider { text-align: center; margin: 20px 0; position: relative; }
+    .divider::before, .divider::after { content: ""; position: absolute; top: 50%; width: 45%; height: 1px; background: #e0e0e0; }
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+    .divider span { background: white; padding: 0 10px; color: #888; }
+    .back-link { text-align: center; margin-top: 15px; }
+    .error-msg, .success-msg { padding: 12px; border-radius: 12px; margin-bottom: 20px; display: none; font-size: 0.85rem; }
+    .error-msg { background: #fee; color: #c0392b; }
+    .success-msg { background: #d4edda; color: #155724; }
+    .footer-note { background: #f8f9fa; padding: 15px; text-align: center; font-size: 0.7rem; color: #888; }
+    .register-fields { display: none; margin-top: 20px; }
+    .warning-banner {
+      width: 100%;
+      padding: 14px 18px;
+      background: #ffe9d6;
+      color: #8a4b00;
+      border: 1px solid #f0c09d;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+<div id="serverWarning" class="warning-banner" style="display:none;"></div>
+<div class="login-card">
+  <div class="card-header">
+    <i class="fas fa-heartbeat"></i>
+    <h1>Nurse Portal</h1>
+    <p>Patient care & clinical records</p>
+  </div>
+  <div class="card-body">
+    <div id="errorMsg" class="error-msg"></div>
+    <div id="successMsg" class="success-msg"></div>
+
+    <form id="nurseLoginForm" action="http://127.0.0.1:8000/login/?next=/dashboard/staff/" method="post">
+      <input type="hidden" name="next" value="/dashboard/staff/">
+      <div class="input-group"><label><i class="fas fa-user"></i> Username</label><input type="text" id="nurseUsername" name="username" required></div>
+      <div class="input-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="nursePassword" name="password" required></div>
+      <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </form>
+
+    <div class="divider"><span>Need access?</span></div>
+    <div class="register-note" style="background:#eef4ff; color:#0b3d91; padding:16px; border-radius:16px; border:1px solid #d0e6ff; margin-bottom:18px;">
+      Nurse accounts are managed by hospital administration. Contact the administrator to get credentials.
+    </div>
+    <div class="back-link"><a href="http://127.0.0.1:8000/index.html"><i class="fas fa-arrow-left"></i> Back to Home</a></div>
+  </div>
+  <div class="footer-note"><i class="fas fa-shield-alt"></i> Secure & Encrypted | Doldam Hospital</div>
+</div>
+
+<script>
+  const warningEl = document.getElementById('serverWarning');
+  const nurseForm = document.getElementById('nurseLoginForm');
+  if (!['http:', 'https:'].includes(window.location.protocol)) {
+    warningEl.innerText = 'Warning: this page must be opened through the Django server, for example http://127.0.0.1:8000/nurse.html';
+    warningEl.style.display = 'block';
+    nurseForm.addEventListener('submit', function(event) { event.preventDefault(); });
+  }
+</script>
+</body>
+</html>

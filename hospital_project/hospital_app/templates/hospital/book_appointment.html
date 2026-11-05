@@ -1,0 +1,191 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Book Appointment - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="book-appointment-page">
+    <div class="page-header">
+        <h1><i class="fas fa-calendar-plus"></i> Book an Appointment</h1>
+        <p>Schedule a consultation with our qualified doctors</p>
+    </div>
+
+    <div class="appointment-form-container">
+        <form method="post" class="appointment-form">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                <h2>Appointment Details</h2>
+                
+                <div class="form-group">
+                    <label for="{{ form.doctor.id_for_label }}">Select Doctor</label>
+                    {{ form.doctor }}
+                    {% if form.doctor.errors %}
+                        <small class="error">{{ form.doctor.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.appointment_date.id_for_label }}">Date & Time</label>
+                    {{ form.appointment_date }}
+                    {% if form.appointment_date.errors %}
+                        <small class="error">{{ form.appointment_date.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.reason.id_for_label }}">Reason for Visit</label>
+                    {{ form.reason }}
+                    {% if form.reason.errors %}
+                        <small class="error">{{ form.reason.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-check"></i> Confirm Appointment
+                </button>
+            </div>
+        </form>
+
+        <div class="available-doctors">
+            <h2><i class="fas fa-stethoscope"></i> Available Doctors</h2>
+            {% if available_doctors %}
+                <div class="doctors-grid">
+                    {% for doctor in available_doctors %}
+                        <div class="doctor-card">
+                            <div class="doctor-info">
+                                <h3>Dr. {{ doctor.user.get_full_name }}</h3>
+                                <p class="specialization">{{ doctor.specialization }}</p>
+                                <p class="experience"><i class="fas fa-briefcase"></i> {{ doctor.experience_years }} years experience</p>
+                                <p class="fee"><i class="fas fa-money-bill"></i> ₩ {{ doctor.consultation_fee }}</p>
+                                <p class="availability">
+                                    {% if doctor.availability_status %}
+                                        <span class="badge badge-available">Available</span>
+                                    {% else %}
+                                        <span class="badge badge-unavailable">Unavailable</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-data">No doctors available at the moment.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .book-appointment-page {
+        padding: 30px 0;
+    }
+    
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+        color: #0D273D;
+        margin-bottom: 10px;
+    }
+    
+    .appointment-form-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    
+    .appointment-form {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .form-section h2 {
+        color: #0D273D;
+        margin-bottom: 20px;
+        font-size: 1.3rem;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        color: #0D273D;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-family: Arial, sans-serif;
+        transition: 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #2c9cd4;
+        box-shadow: 0 0 0 3px rgba(44,156,212,0.1);
+    }
+    
+    .btn-lg {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+    
+    .available-doctors h2 {
+        color: #0D273D;
+        margin-bottom: 20px;
+    }
+    
+    .doctors-grid {
+        display: grid;
+        gap: 15px;
+    }
+    
+    .doctor-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-left: 4px solid #2c9cd4;
+    }
+    
+    .doctor-card h3 {
+        color: #0D273D;
+        margin-bottom: 8px;
+    }
+    
+    .specialization {
+        color: #2c9cd4;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .doctor-card p {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+    }
+    
+    @media (max-width: 768px) {
+        .appointment-form-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

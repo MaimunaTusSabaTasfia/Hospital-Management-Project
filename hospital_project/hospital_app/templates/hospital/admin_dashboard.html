@@ -1,0 +1,206 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Admin Dashboard - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="dashboard admin-dashboard">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-user-cog"></i> Admin Dashboard</h1>
+        <p>Hospital Management & System Overview</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <h3>Total Users</h3>
+            <p class="stat-number">{{ total_users }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Patients</h3>
+            <p class="stat-number">{{ total_patients }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Doctors</h3>
+            <p class="stat-number">{{ total_doctors }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Staff</h3>
+            <p class="stat-number">{{ total_staff }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Appointments</h3>
+            <p class="stat-number">{{ total_appointments }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Scheduled</h3>
+            <p class="stat-number">{{ scheduled_appointments }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Completed</h3>
+            <p class="stat-number">{{ completed_appointments }}</p>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-check"></i> Recent Appointments</h2>
+                <a href="{% url 'view_appointments' %}" class="btn btn-outline btn-sm">View All</a>
+            </div>
+            {% if recent_appointments %}
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Date & Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in recent_appointments %}
+                                <tr>
+                                    <td>{{ appointment.patient.user.get_full_name }}</td>
+                                    <td>Dr. {{ appointment.doctor.user.get_full_name }}</td>
+                                    <td>{{ appointment.appointment_date|date:"M d, Y - g:i A" }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ appointment.status }}">
+                                            {{ appointment.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'appointment_detail' appointment.pk %}" class="btn-link">View</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="no-data">No appointments.</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> System Controls</h2>
+            </div>
+            <div class="admin-controls">
+                <a href="/admin/" class="control-btn">
+                    <i class="fas fa-database"></i>
+                    <span>Django Admin Panel</span>
+                </a>
+                <a href="{% url 'admin_manage_users' %}" class="control-btn">
+                    <i class="fas fa-users"></i>
+                    <span>Manage Users</span>
+                </a>
+                <a href="{% url 'view_appointments' %}" class="control-btn">
+                    <i class="fas fa-tasks"></i>
+                    <span>Manage Appointments</span>
+                </a>
+                <a href="{% url 'view_medical_records' %}" class="control-btn">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Medical Records</span>
+                </a>
+                <a href="{% url 'doctor_list' %}" class="control-btn">
+                    <i class="fas fa-stethoscope"></i>
+                    <span>Doctor Directory</span>
+                </a>
+                <a href="{% url 'profile' %}" class="control-btn">
+                    <i class="fas fa-user-circle"></i>
+                    <span>My Profile</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> System Statistics</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-info">
+                    <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                    <div class="stat-details">
+                        <h4>Doctors</h4>
+                        <p>{{ total_doctors }} registered</p>
+                    </div>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-icon"><i class="fas fa-user"></i></div>
+                    <div class="stat-details">
+                        <h4>Patients</h4>
+                        <p>{{ total_patients }} registered</p>
+                    </div>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                    <div class="stat-details">
+                        <h4>Appointments</h4>
+                        <p>{{ total_appointments }} total</p>
+                    </div>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-details">
+                        <h4>Completed</h4>
+                        <p>{{ completed_appointments }} done</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .admin-table th {
+        background: #f8f9fa;
+        color: #0D273D;
+        font-weight: 600;
+    }
+    
+    .admin-table tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .admin-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .control-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px;
+        background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    
+    .control-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .control-btn i {
+        font-size: 1.3rem;
+    }
+</style>
+{% endblock %}

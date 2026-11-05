@@ -1,0 +1,168 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Login - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-card">
+        <div class="card-header">
+            <i class="fas fa-sign-in-alt"></i>
+            <h1>Login</h1>
+            <p>Access your hospital account</p>
+        </div>
+        <div class="card-body">
+            {% if form.non_field_errors %}
+                <div class="error-msg" style="display: block;">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <small class="error">{{ form.username.errors.0 }}</small>
+                    {% endif %}
+                    <small class="hint">Use your username, email, or full name</small>
+                </div>
+                
+                <div class="form-group">
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <small class="error">{{ form.password.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Don't have an account?</p>
+                <a href="{% url 'patient_register' %}" class="btn-link">Register as Patient</a>
+                <span> | </span>
+                <a href="{% url 'doctor_register' %}" class="btn-link">Join as Doctor</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        padding: 20px;
+    }
+    
+    .login-card {
+        width: 100%;
+        max-width: 450px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    
+    .card-header i {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .card-header h1 {
+        font-size: 1.8rem;
+        margin: 10px 0;
+    }
+    
+    .card-header p {
+        color: #7bc5e8;
+        font-size: 0.9rem;
+    }
+    
+    .card-body {
+        padding: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: 0.3s;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #2c9cd4;
+        box-shadow: 0 0 0 3px rgba(44,156,212,0.1);
+    }
+    
+    .btn-block {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+    }
+    
+    .login-footer {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        font-size: 0.9rem;
+    }
+    
+    .btn-link {
+        color: #2c9cd4;
+        text-decoration: none;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    
+    .btn-link:hover {
+        text-decoration: underline;
+    }
+    
+    .error-msg {
+        background: #fee;
+        color: #c0392b;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .error {
+        color: #c0392b;
+        font-size: 0.85rem;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .hint {
+        display: block;
+        color: #555;
+        font-size: 0.8rem;
+        margin-top: 6px;
+    }
+</style>
+{% endblock %}

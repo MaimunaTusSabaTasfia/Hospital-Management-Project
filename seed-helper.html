@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>One-Click Setup - Doldam Hospital</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; text-align: center; background: linear-gradient(135deg, #e0f7fa, #f1f8e9); }
+    .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    button { background: #0D273D; color: white; padding: 15px 30px; font-size: 18px; border: none; border-radius: 10px; cursor: pointer; margin: 10px; }
+    button:hover { background: #1a4a6e; }
+    .success { color: green; margin-top: 20px; padding: 10px; background: #e8f5e9; border-radius: 10px; display: none; }
+    .credentials { text-align: left; margin-top: 20px; background: #f5f5f5; padding: 15px; border-radius: 10px; display: none; }
+    h2 { color: #0D273D; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h2>🏥 Doldam Hospital Setup</h2>
+  <p>Click the button below to automatically add all login credentials:</p>
+  <button onclick="addAllData()">🔧 Add All Users & Data</button>
+  
+  <div id="successMsg" class="success">
+    ✅ All data added successfully!
+  </div>
+  
+  <div id="credentials" class="credentials">
+    <h3>Login Credentials:</h3>
+    <p><strong>👨‍⚕️ Doctor:</strong> Username: <code>drkim</code> | Password: <code>doctor123</code></p>
+    <p><strong>👤 Patient:</strong> Username: <code>patient1</code> | Password: <code>patient123</code></p>
+    <p><strong>📋 Staff:</strong> Username: <code>staff1</code> | Password: <code>staff123</code></p>
+    <p><strong>💊 Nurse:</strong> Username: <code>nurse1</code> | Password: <code>nurse123</code></p>
+    <p><strong>👑 Admin:</strong> Username: <code>Admin</code> | Password: <code>12345</code></p>
+    <hr>
+    <a href="index.html"><button style="background:#2c9cd4;">Go to Hospital Homepage</button></a>
+  </div>
+</div>
+
+<script>
+function addAllData() {
+  // Add Doctors
+  localStorage.setItem('doctors', JSON.stringify([
+    { username: "drkim", password: "doctor123", name: "Dr. Kim Tae-ho", speciality: "Cardiothoracic Surgeon", qualification: "MD, FACS", workingDays: "Monday to Saturday", availability: "Available", achievements: [15,22,18] },
+    { username: "drpark", password: "doctor123", name: "Dr. Park Soo-yeon", speciality: "Senior Neurologist", qualification: "MD, DM Neurology", workingDays: "Monday to Friday", availability: "Available", achievements: [12,18,20] },
+    { username: "drvikram", password: "doctor123", name: "Dr. Vikram Rathore", speciality: "Orthopedic Surgeon", qualification: "MS Ortho, DNB", workingDays: "Monday to Saturday", availability: "Available", achievements: [20,25,22] }
+  ]));
+
+  // Add Patients
+  localStorage.setItem('patients', JSON.stringify([
+    { username: "patient1", password: "patient123", name: "John Doe", age: "35", problem: "Chest Pain", bill: 5000, billStatus: "Paid", prescription: "Take rest", reports: "ECG Normal" },
+    { username: "patient2", password: "patient123", name: "Jane Smith", age: "28", problem: "Migraine", bill: 3000, billStatus: "Unpaid", prescription: "Consult neurologist", reports: "MRI scheduled" }
+  ]));
+
+  // Add Staff
+  localStorage.setItem('staff', JSON.stringify([
+    { name: "Reception Staff", username: "staff1", password: "staff123", qualification: "BBA", workPart: "Reception", workingDays: "Mon-Fri", status: "Approved", achievements: [5,8,6], problems: [] }
+  ]));
+
+  // Add Nurses
+  localStorage.setItem('nurses', JSON.stringify([
+    { name: "Nurse Emma", username: "nurse1", password: "nurse123", qualification: "BSc Nursing", experience: "3 years", workingDays: "Mon-Sat", status: "Approved", achievements: [10,12,8], problems: [] }
+  ]));
+
+  // Add Medicines
+  localStorage.setItem('medicines', JSON.stringify([
+    { name: "Paracetamol", price: 50, quantity: 100 },
+    { name: "Antibiotic", price: 120, quantity: 50 }
+  ]));
+
+  // Add Appointments
+  localStorage.setItem('appointments', JSON.stringify([
+    { doctorUsername: "drkim", patientUsername: "patient1", dateTime: "2024-12-20", notes: "First consultation" }
+  ]));
+
+  // Add Operations
+  localStorage.setItem('operations', JSON.stringify([
+    { doctorUsername: "drvikram", patientUsername: "patient2", details: "Knee surgery", status: "Pending" }
+  ]));
+
+  // Show success and credentials
+  document.getElementById('successMsg').style.display = 'block';
+  document.getElementById('credentials').style.display = 'block';
+}
+</script>
+</body>
+</html>

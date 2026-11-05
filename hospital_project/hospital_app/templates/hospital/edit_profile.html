@@ -1,0 +1,183 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Edit Profile - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="edit-profile-page">
+    <div class="page-header">
+        <h1><i class="fas fa-user-edit"></i> Edit Profile</h1>
+    </div>
+
+    <div class="form-container">
+        <form method="post" class="profile-form">
+            {% csrf_token %}
+            
+            <div class="form-section">
+                <h2>Personal Information</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                            <small class="error">{{ form.first_name.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                            <small class="error">{{ form.last_name.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <small class="error">{{ form.email.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.phone.id_for_label }}">Phone</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <small class="error">{{ form.phone.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.city.id_for_label }}">City</label>
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                            <small class="error">{{ form.city.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.state.id_for_label }}">State</label>
+                        {{ form.state }}
+                        {% if form.state.errors %}
+                            <small class="error">{{ form.state.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.postal_code.id_for_label }}">Postal Code</label>
+                        {{ form.postal_code }}
+                        {% if form.postal_code.errors %}
+                            <small class="error">{{ form.postal_code.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.address.id_for_label }}">Address</label>
+                    {{ form.address }}
+                    {% if form.address.errors %}
+                        <small class="error">{{ form.address.errors.0 }}</small>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{% url 'view_profile' %}" class="btn btn-outline">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .edit-profile-page {
+        padding: 30px 0;
+    }
+    
+    .form-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 30px;
+        max-width: 600px;
+    }
+    
+    .form-section {
+        margin-bottom: 30px;
+    }
+    
+    .form-section h2 {
+        color: #0D273D;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        color: #0D273D;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-family: Arial, sans-serif;
+        transition: 0.3s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #2c9cd4;
+        box-shadow: 0 0 0 3px rgba(44,156,212,0.1);
+    }
+    
+    .error {
+        color: #c0392b;
+        font-size: 0.85rem;
+        display: block;
+        margin-top: 5px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    
+    @media (max-width: 600px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-container {
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}

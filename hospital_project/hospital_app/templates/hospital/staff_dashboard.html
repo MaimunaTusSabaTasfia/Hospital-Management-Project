@@ -1,0 +1,62 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Staff Dashboard - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="dashboard staff-dashboard">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-users"></i> Staff Dashboard</h1>
+        <p>Hospital Operations Overview</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <h3>Total Appointments</h3>
+            <p class="stat-number">{{ total_appointments }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Scheduled Today</h3>
+            <p class="stat-number">{{ scheduled_appointments }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Patients</h3>
+            <p class="stat-number">{{ total_patients }}</p>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-check"></i> Appointments Schedule</h2>
+            </div>
+            {% if appointments %}
+                <div class="appointments-list">
+                    {% for appointment in appointments %}
+                        <div class="appointment-card">
+                            <div class="appointment-info">
+                                <h3>{{ appointment.patient.user.get_full_name }}</h3>
+                                <p class="doctor">Dr. {{ appointment.doctor.user.get_full_name }}</p>
+                                <p class="date">
+                                    <i class="fas fa-clock"></i>
+                                    {{ appointment.appointment_date|date:"g:i A" }}
+                                </p>
+                                <p class="status">
+                                    <span class="badge badge-{{ appointment.status }}">
+                                        {{ appointment.get_status_display }}
+                                    </span>
+                                </p>
+                            </div>
+                            <a href="{% url 'appointment_detail' appointment.pk %}" class="btn btn-sm">
+                                View
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-data">No appointments scheduled.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+Django==4.2.0
+djangorestframework==3.14.0
+django-filter==23.1
+django-cors-headers==4.0.0
+python-decouple==3.8
+Pillow==12.2.0
+gunicorn==20.1.0
+whitenoise==6.4.0
+
+# Note: psycopg2-binary is not required for SQLite local development.
+# Install separately only when using PostgreSQL.

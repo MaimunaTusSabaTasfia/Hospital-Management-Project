@@ -1,0 +1,75 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Home - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="home-page">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Doldam Hospital</h1>
+            <p>Where Care Meets Innovation</p>
+            <div class="hero-buttons">
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'patient_register' %}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register as Patient</a>
+                    <a href="{% url 'doctor_register' %}" class="btn btn-secondary"><i class="fas fa-stethoscope"></i> Join as Doctor</a>
+                {% else %}
+                    <a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Book Appointment</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="statistics">
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <h3>{{ total_patients }}</h3>
+            <p>Total Patients</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-stethoscope"></i>
+            <h3>{{ total_doctors }}</h3>
+            <p>Expert Doctors</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-calendar-check"></i>
+            <h3>{{ total_appointments }}</h3>
+            <p>Appointments Scheduled</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-hospital"></i>
+            <h3>24/7</h3>
+            <p>Emergency Service</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>Our Services</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-book-medical"></i>
+                <h3>Online Consultation</h3>
+                <p>Schedule appointments with our qualified doctors anytime, anywhere.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-prescription-bottle"></i>
+                <h3>Prescription Management</h3>
+                <p>View and manage your prescriptions digitally with ease.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-file-medical"></i>
+                <h3>Medical Records</h3>
+                <p>Access your complete medical history in one secure place.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-hospital-user"></i>
+                <h3>Patient Care</h3>
+                <p>Dedicated support and care for all our patients.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

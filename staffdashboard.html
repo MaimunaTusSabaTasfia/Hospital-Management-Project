@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Staff Dashboard — Doldam</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .card { border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+    input, textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; margin: 5px 0; }
+    button { padding: 8px 12px; background: #1976d2; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Staff Dashboard</h1>
+  <p id="welcome"></p>
+  <button onclick="logout()">Logout</button>
+  <button onclick="window.location.href='index.html'">Back to Home</button>
+
+  <div class="card">
+    <h2>My Details</h2>
+    <div id="staffDetails"></div>
+  </div>
+
+  <div class="card">
+    <h2>Achievements</h2>
+    <canvas id="achievementsChart" height="100"></canvas>
+  </div>
+
+  <div class="card">
+    <h2>Report Workplace Problem</h2>
+    <form id="problemForm">
+      <textarea id="problemText" placeholder="Describe problem..." required></textarea>
+      <button type="submit">Submit Problem</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Previous Problems</h2>
+    <ul id="problemsList"></ul>
+  </div>
+
+  <script src="staffdashboard.js"></script>
+</body>
+</html>

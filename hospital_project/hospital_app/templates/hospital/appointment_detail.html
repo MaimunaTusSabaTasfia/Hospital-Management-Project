@@ -1,0 +1,182 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Appointment Details - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="appointment-detail-page">
+    <div class="page-header">
+        <a href="{% url 'view_appointments' %}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+        <h1>Appointment Details</h1>
+    </div>
+
+    <div class="appointment-detail">
+        <div class="detail-section">
+            <h2>Patient Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Name</label>
+                    <p>{{ appointment.patient.user.get_full_name }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Patient ID</label>
+                    <p>{{ appointment.patient.patient_id }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Email</label>
+                    <p>{{ appointment.patient.user.email }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Phone</label>
+                    <p>{{ appointment.patient.user.phone|default:"Not provided" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>Doctor Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Doctor</label>
+                    <p>Dr. {{ appointment.doctor.user.get_full_name }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Specialization</label>
+                    <p>{{ appointment.doctor.specialization }}</p>
+                </div>
+                <div class="info-item">
+                    <label>License Number</label>
+                    <p>{{ appointment.doctor.license_number }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Experience</label>
+                    <p>{{ appointment.doctor.experience_years }} years</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h2>Appointment Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Date & Time</label>
+                    <p>{{ appointment.appointment_date|date:"M d, Y - g:i A" }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Status</label>
+                    <p><span class="badge badge-{{ appointment.status }}">{{ appointment.get_status_display }}</span></p>
+                </div>
+                <div class="info-item full-width">
+                    <label>Reason for Visit</label>
+                    <p>{{ appointment.reason }}</p>
+                </div>
+                {% if appointment.notes %}
+                    <div class="info-item full-width">
+                        <label>Notes</label>
+                        <p>{{ appointment.notes }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if is_doctor and appointment.status == 'scheduled' %}
+            <div class="detail-section">
+                <h2>Doctor Actions</h2>
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Mark as Completed</button>
+                    <button class="btn btn-secondary">Add Prescription</button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .appointment-detail-page {
+        padding: 30px 0;
+    }
+    
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .btn-back {
+        color: #2c9cd4;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+    
+    .appointment-detail {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .detail-section {
+        padding: 30px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .detail-section:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-section h2 {
+        color: #0D273D;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .info-item {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+    
+    .info-item.full-width {
+        grid-column: 1 / -1;
+    }
+    
+    .info-item label {
+        display: block;
+        color: #666;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+    }
+    
+    .info-item p {
+        color: #0D273D;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .action-buttons button {
+        padding: 12px 20px;
+        border-radius: 6px;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+</style>
+{% endblock %}

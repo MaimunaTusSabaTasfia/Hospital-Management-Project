@@ -1,0 +1,363 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Manage Users - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="admin-manage-users">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-users"></i> User Management</h1>
+        <p>Manage all hospital users and their roles</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-cards">
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <h3>Total Users</h3>
+            <p class="count">{{ total_users }}</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-crown"></i>
+            <h3>Admins</h3>
+            <p class="count">{{ total_admins }}</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-stethoscope"></i>
+            <h3>Doctors</h3>
+            <p class="count">{{ total_doctors }}</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-user"></i>
+            <h3>Patients</h3>
+            <p class="count">{{ total_patients }}</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-user-nurse"></i>
+            <h3>Staff</h3>
+            <p class="count">{{ total_staff }}</p>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filter-section">
+        <h2>Filter Users</h2>
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <input type="text" name="search" placeholder="Search by name or email..." value="{{ request.GET.search }}">
+                <select name="role">
+                    <option value="">All Roles</option>
+                    {% for role_code, role_name in roles %}
+                        <option value="{{ role_code }}" {% if request.GET.role == role_code %}selected{% endif %}>
+                            {{ role_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Filter
+                </button>
+                <a href="{% url 'admin_manage_users' %}" class="btn btn-outline">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Users Table -->
+    <div class="users-section">
+        <h2>Users List</h2>
+        {% if users %}
+            <div class="table-responsive">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <strong>{{ user.get_full_name|default:user.username }}</strong>
+                                </td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>
+                                    <span class="role-badge role-{{ user.role }}">
+                                        {{ user.get_role_display }}
+                                    </span>
+                                </td>
+                                <td>{{ user.phone|default:"N/A" }}</td>
+                                <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                                <td>
+                                    {% if user.is_active %}
+                                        <span class="status-badge active">
+                                            <i class="fas fa-check-circle"></i> Active
+                                        </span>
+                                    {% else %}
+                                        <span class="status-badge inactive">
+                                            <i class="fas fa-times-circle"></i> Inactive
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/admin/hospital_app/user/{{ user.pk }}/change/" class="btn-action" target="_blank">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="no-data">
+                <i class="fas fa-inbox"></i>
+                <p>No users found.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+            <a href="/admin/hospital_app/user/add/" class="btn btn-primary" target="_blank">
+                <i class="fas fa-user-plus"></i> Add New User
+            </a>
+            <a href="/admin/hospital_app/doctor/" class="btn btn-info" target="_blank">
+                <i class="fas fa-stethoscope"></i> Manage Doctors
+            </a>
+            <a href="/admin/hospital_app/patient/" class="btn btn-info" target="_blank">
+                <i class="fas fa-hospital-user"></i> Manage Patients
+            </a>
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-manage-users {
+        padding: 20px;
+    }
+
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #0D273D;
+    }
+
+    .stat-card i {
+        font-size: 24px;
+        color: #0D273D;
+        margin-bottom: 10px;
+    }
+
+    .stat-card h3 {
+        font-size: 14px;
+        color: #666;
+        margin: 5px 0;
+    }
+
+    .stat-card .count {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0D273D;
+    }
+
+    .filter-section {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-form {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter-form input,
+    .filter-form select {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .filter-form input {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .filter-form select {
+        min-width: 150px;
+    }
+
+    .users-section {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .users-table th {
+        background: #f8f9fa;
+        color: #0D273D;
+        font-weight: 600;
+    }
+
+    .users-table tr:hover {
+        background: #f8f9fa;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .role-admin {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .role-doctor {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .role-patient {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .role-staff,
+    .role-nurse {
+        background: #e2e3e5;
+        color: #383d41;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-badge.active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-badge.inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 12px;
+        background: #0D273D;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 12px;
+        transition: 0.3s;
+    }
+
+    .btn-action:hover {
+        background: #1a4a6e;
+    }
+
+    .quick-actions {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 40px 20px;
+        color: #999;
+    }
+
+    .no-data i {
+        font-size: 48px;
+        margin-bottom: 10px;
+        color: #ddd;
+    }
+
+    @media (max-width: 768px) {
+        .filter-form {
+            flex-direction: column;
+        }
+
+        .filter-form input,
+        .filter-form select {
+            width: 100%;
+        }
+
+        .stats-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .users-table {
+            font-size: 12px;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 8px;
+        }
+    }
+</style>
+{% endblock %}

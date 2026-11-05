@@ -1,0 +1,200 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Doctor Registration - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="register-page">
+    <div class="register-card">
+        <div class="card-header">
+            <i class="fas fa-stethoscope"></i>
+            <h1>Register as Doctor</h1>
+            <p>Join Our Medical Team</p>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                            <small class="error">{{ form.first_name.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                            <small class="error">{{ form.last_name.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <small class="error">{{ form.email.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.phone.id_for_label }}">Phone (Optional)</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <small class="error">{{ form.phone.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.specialization.id_for_label }}">Specialization</label>
+                        {{ form.specialization }}
+                        {% if form.specialization.errors %}
+                            <small class="error">{{ form.specialization.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.license_number.id_for_label }}">License Number</label>
+                        {{ form.license_number }}
+                        {% if form.license_number.errors %}
+                            <small class="error">{{ form.license_number.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.experience_years.id_for_label }}">Experience (Years)</label>
+                        {{ form.experience_years }}
+                        {% if form.experience_years.errors %}
+                            <small class="error">{{ form.experience_years.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.password1.id_for_label }}">Password</label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <small class="error">{{ form.password1.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <small class="error">{{ form.password2.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-check"></i> Register
+                </button>
+            </form>
+            
+            <div class="register-footer">
+                <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .register-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        background: linear-gradient(135deg, #e0f7fa 0%, #f1f8e9 100%);
+    }
+    
+    .register-card {
+        width: 100%;
+        max-width: 600px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    
+    .card-header i {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .card-body {
+        padding: 30px;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        color: #0D273D;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: 0.3s;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #2c9cd4;
+        box-shadow: 0 0 0 3px rgba(44,156,212,0.1);
+    }
+    
+    .btn-block {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+    }
+    
+    .error {
+        color: #c0392b;
+        font-size: 0.85rem;
+        display: block;
+        margin-top: 5px;
+    }
+    
+    .register-footer {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    
+    .register-footer a {
+        color: #2c9cd4;
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

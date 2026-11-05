@@ -1,0 +1,140 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Doctor Profile - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="doctor-profile-page">
+    <div class="page-header">
+        <a href="{% url 'doctor_list' %}" class="btn-back"><i class="fas fa-arrow-left"></i> Back</a>
+        <h1>Doctor Profile</h1>
+    </div>
+
+    <div class="profile-card">
+        <div class="profile-header" style="background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%); color: white; padding: 40px; text-align: center;">
+            <i class="fas fa-stethoscope" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <h2>Dr. {{ doctor.user.get_full_name }}</h2>
+            <p style="color: #7bc5e8;">{{ doctor.specialization }}</p>
+        </div>
+
+        <div class="profile-content">
+            <div class="section">
+                <h3>Professional Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>License Number</label>
+                        <p>{{ doctor.license_number }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Experience</label>
+                        <p>{{ doctor.experience_years }} years</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Consultation Fee</label>
+                        <p>₩ {{ doctor.consultation_fee }}</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Availability</label>
+                        <p>
+                            {% if doctor.availability_status %}
+                                <span class="badge badge-available">Available</span>
+                            {% else %}
+                                <span class="badge badge-unavailable">Unavailable</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {% if doctor.bio %}
+                <div class="section">
+                    <h3>About</h3>
+                    <p>{{ doctor.bio }}</p>
+                </div>
+            {% endif %}
+
+            {% if doctor.available_hours %}
+                <div class="section">
+                    <h3>Availability</h3>
+                    <p><strong>Hours:</strong> {{ doctor.available_hours }}</p>
+                    {% if doctor.available_days %}
+                        <p><strong>Days:</strong> {{ doctor.available_days }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="section" style="background: #f8f9fa; border-radius: 6px; padding: 20px; text-align: center;">
+                {% if user.is_authenticated and user.role == 'patient' %}
+                    <a href="{% url 'book_appointment' %}?doctor={{ doctor.pk }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calendar-plus"></i> Book Appointment
+                    </a>
+                {% elif not user.is_authenticated %}
+                    <a href="{% url 'patient_register' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus"></i> Register to Book
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .doctor-profile-page {
+        padding: 30px 0;
+    }
+    
+    .profile-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .profile-content {
+        padding: 40px;
+    }
+    
+    .section {
+        margin-bottom: 30px;
+    }
+    
+    .section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .section h3 {
+        color: #0D273D;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .info-item {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+    
+    .info-item label {
+        display: block;
+        color: #666;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+    }
+    
+    .info-item p {
+        color: #0D273D;
+        font-size: 1rem;
+    }
+</style>
+{% endblock %}

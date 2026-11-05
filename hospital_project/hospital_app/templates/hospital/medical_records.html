@@ -1,0 +1,141 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Medical Records - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="records-page">
+    <div class="page-header">
+        <h1><i class="fas fa-file-medical"></i> Medical Records</h1>
+    </div>
+
+    <div class="records-container">
+        {% if records %}
+            <div class="records-list">
+                {% for record in records %}
+                    <div class="record-card">
+                        <div class="record-header">
+                            <h3>Dr. {{ record.doctor.user.get_full_name }}</h3>
+                            <span class="record-date">{{ record.record_date|date:"M d, Y - g:i A" }}</span>
+                        </div>
+                        
+                        <div class="record-body">
+                            <div class="record-section">
+                                <label>Diagnosis</label>
+                                <p>{{ record.diagnosis }}</p>
+                            </div>
+                            
+                            {% if record.treatment %}
+                                <div class="record-section">
+                                    <label>Treatment</label>
+                                    <p>{{ record.treatment }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            {% if record.test_results %}
+                                <div class="record-section">
+                                    <label>Test Results</label>
+                                    <p>{{ record.test_results }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            {% if record.notes %}
+                                <div class="record-section">
+                                    <label>Additional Notes</label>
+                                    <p>{{ record.notes }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data">
+                <i class="fas fa-file-medical"></i>
+                <p>No medical records available.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .records-page {
+        padding: 30px 0;
+    }
+    
+    .records-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .records-list {
+        padding: 20px;
+    }
+    
+    .record-card {
+        border: 1px solid #eee;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+    
+    .record-header {
+        background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+        color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .record-header h3 {
+        margin: 0;
+    }
+    
+    .record-date {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+    
+    .record-body {
+        padding: 20px;
+    }
+    
+    .record-section {
+        margin-bottom: 15px;
+    }
+    
+    .record-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .record-section label {
+        display: block;
+        color: #0D273D;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+    
+    .record-section p {
+        color: #666;
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    .no-data {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+    
+    .no-data i {
+        font-size: 3rem;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

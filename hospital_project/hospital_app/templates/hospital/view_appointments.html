@@ -1,0 +1,179 @@
+{% extends "hospital/base.html" %}
+{% load static %}
+
+{% block title %}Appointments - Doldam Hospital{% endblock %}
+
+{% block content %}
+<div class="appointments-page">
+    <div class="page-header">
+        <h1><i class="fas fa-calendar-check"></i> Appointments</h1>
+        {% if user.role == 'patient' %}
+            <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Book New Appointment
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="appointments-container">
+        {% if appointments %}
+            <div class="appointments-list">
+                {% for appointment in appointments %}
+                    <div class="appointment-item">
+                        <div class="appointment-left">
+                            <div class="date-badge">
+                                <span class="date">{{ appointment.appointment_date|date:"d" }}</span>
+                                <span class="month">{{ appointment.appointment_date|date:"M" }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-middle">
+                            {% if user.role == 'patient' %}
+                                <h3>Dr. {{ appointment.doctor.user.get_full_name }}</h3>
+                                <p class="specialization">{{ appointment.doctor.specialization }}</p>
+                            {% else %}
+                                <h3>{{ appointment.patient.user.get_full_name }}</h3>
+                                <p class="patient-id">ID: {{ appointment.patient.patient_id }}</p>
+                            {% endif %}
+                            <p class="time"><i class="fas fa-clock"></i> {{ appointment.appointment_date|date:"g:i A" }}</p>
+                            <p class="reason">{{ appointment.reason|truncatewords:15 }}</p>
+                        </div>
+                        
+                        <div class="appointment-right">
+                            <span class="badge badge-{{ appointment.status }}">
+                                {{ appointment.get_status_display }}
+                            </span>
+                            <a href="{% url 'appointment_detail' appointment.pk %}" class="btn btn-outline btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-data">
+                <i class="fas fa-calendar-times"></i>
+                <p>No appointments found.</p>
+                {% if user.role == 'patient' %}
+                    <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+                        Book your first appointment
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .appointments-page {
+        padding: 30px 0;
+    }
+    
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    
+    .page-header h1 {
+        font-size: 1.8rem;
+        color: #0D273D;
+    }
+    
+    .appointments-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .appointments-list {
+        padding: 20px;
+    }
+    
+    .appointment-item {
+        display: grid;
+        grid-template-columns: 80px 1fr auto;
+        gap: 20px;
+        align-items: center;
+        padding: 20px;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        transition: 0.3s;
+    }
+    
+    .appointment-item:hover {
+        background: #f8f9fa;
+        border-color: #2c9cd4;
+    }
+    
+    .date-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: linear-gradient(135deg, #0D273D 0%, #1a4a6e 100%);
+        color: white;
+        border-radius: 6px;
+        padding: 12px 8px;
+        text-align: center;
+    }
+    
+    .date-badge .date {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .date-badge .month {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+    
+    .appointment-middle h3 {
+        color: #0D273D;
+        margin: 0 0 5px 0;
+    }
+    
+    .specialization,
+    .patient-id {
+        color: #2c9cd4;
+        font-size: 0.9rem;
+        margin: 3px 0;
+    }
+    
+    .time {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 8px 0 5px 0;
+    }
+    
+    .reason {
+        color: #666;
+        font-size: 0.85rem;
+    }
+    
+    .appointment-right {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+    }
+    
+    .no-data {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+    }
+    
+    .no-data i {
+        font-size: 3rem;
+        color: #ccc;
+        margin-bottom: 15px;
+    }
+    
+    .no-data p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}

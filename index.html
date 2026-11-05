@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Doldam Hospital | Where Care Meets Innovation</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa 0%, #f1f8e9 100%);
+      color: #0a2a3b;
+      scroll-behavior: smooth;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .hospital-header {
+      background: #0D273D;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 16px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo-area h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFFFFF, #B8E1FC);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .logo-area p {
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: #f0f9ff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-links a:hover { color: #7bc5e8; }
+
+    .info-banner {
+      background: #1a3a50;
+      color: white;
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+    }
+    .emergency-ticker {
+      background: #c0392b;
+      padding: 4px 12px;
+      border-radius: 30px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+
+    .hero-slideshow {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      margin-top: 0;
+      overflow: hidden;
+      border-radius: 28px;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+    }
+    .slide-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.9s ease;
+      background-size: cover;
+      background-position: center;
+    }
+    .slide-item.active { opacity: 1; z-index: 2; }
+    .slide-overlay {
+      background: linear-gradient(0deg, rgba(13,39,61,0.75) 0%, rgba(0,0,0,0.4) 100%);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+    }
+    .slide-overlay h2 { font-size: 2.5rem; margin-bottom: 16px; }
+    .slide-overlay p { font-size: 1.1rem; max-width: 600px; }
+    .arrow-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(13,39,61,0.6);
+      width: 42px;
+      height: 42px;
+      border-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      z-index: 15;
+    }
+    .arrow-left { left: 20px; }
+    .arrow-right { right: 20px; }
+    .slide-controls { position: absolute; bottom: 20px; left: 0; right: 0; display: flex; justify-content: center; gap: 12px; z-index: 15; }
+    .dot-nav { width: 10px; height: 10px; background: rgba(255,255,255,0.6); border-radius: 50%; cursor: pointer; }
+    .dot-nav.active-dot { background: white; width: 28px; border-radius: 20px; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px;
+      margin: 40px 0;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-5px); }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0D273D;
+    }
+    .stat-label { color: #2c9cd4; font-weight: 500; margin-top: 8px; }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0D273D;
+      margin: 48px 0 24px 0;
+      position: relative;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: #2c9cd4;
+    }
+
+    .doctor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin: 30px 0;
+    }
+    .doctor-card {
+      background: white;
+      border-radius: 28px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .doctor-card:hover { transform: translateY(-8px); }
+    .doctor-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #e0f2fe;
+    }
+
+    /* Doctor Modal Styles */
+    .doctor-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .doctor-modal-content {
+      background: white;
+      max-width: 450px;
+      width: 90%;
+      border-radius: 32px;
+      padding: 32px;
+      text-align: center;
+      position: relative;
+      animation: fadeInUp 0.3s;
+    }
+    .doctor-modal-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid #2c9cd4;
+    }
+    .doctor-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #666;
+      transition: 0.2s;
+    }
+    .doctor-modal-close:hover { color: #c0392b; }
+    .doctor-modal-content h2 { color: #0D273D; margin-bottom: 8px; }
+    .doctor-specialty-modal { color: #2c9cd4; font-size: 1rem; margin-bottom: 15px; font-weight: 600; }
+    .doctor-exp { margin: 10px 0; color: #2c5a74; }
+    .doctor-achievements { margin: 10px 0; color: #2c5a74; }
+    .doctor-modal-btn {
+      background: #0D273D;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.2s;
+    }
+    .doctor-modal-btn:hover { background: #1a4a6e; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 30px 0;
+    }
+    .blog-card {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      transition: 0.3s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      cursor: pointer;
+    }
+    .blog-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+    .blog-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .blog-content { padding: 20px; }
+    .blog-date { font-size: 0.75rem; color: #2c9cd4; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .blog-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: #0D273D; }
+    .blog-excerpt { color: #5a7e9a; font-size: 0.85rem; line-height: 1.4; }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 24px;
+      margin: 30px 0;
+    }
+    .role-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: 0.25s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+    .role-card:hover { transform: translateY(-5px); }
+    .role-icon { font-size: 3rem; color: #0D273D; margin-bottom: 12px; }
+    .role-card h3 { font-size: 1.2rem; margin-bottom: 8px; color: #0D273D; }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #0D273D;
+      color: #0D273D;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: 0.2s;
+    }
+    .btn-outline:hover {
+      background: #0D273D;
+      color: white;
+    }
+
+    .pages-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      margin: 30px 0 50px;
+    }
+    .page-card {
+      background: white;
+      padding: 24px 28px;
+      border-radius: 28px;
+      text-align: center;
+      min-width: 150px;
+      transition: 0.3s;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    .page-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    }
+    .page-card i { font-size: 2.2rem; color: #0D273D; display: block; margin-bottom: 10px; }
+    .page-card p { font-weight: 600; margin-top: 8px; color: #0D273D; }
+
+    .notice-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 24px;
+      padding: 20px;
+      scroll-behavior: smooth;
+    }
+    .notice-scroll::-webkit-scrollbar { height: 6px; }
+    .notice-card {
+      min-width: 270px;
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+    .notice-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
+    .notice-img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .notice-text { padding: 16px; }
+    .notice-text h4 { font-size: 1.1rem; margin-bottom: 8px; color: #0D273D; }
+    .notice-text p { color: #5a7e9a; font-size: 0.85rem; }
+
+    .testimonial-slider {
+      background: #0D273D;
+      color: white;
+      border-radius: 28px;
+      padding: 28px 32px;
+      text-align: center;
+      margin: 40px 0;
+    }
+    .testimonial-text { 
+      font-size: 1rem; 
+      font-style: italic; 
+      max-width: 700px; 
+      margin: 0 auto;
+      line-height: 1.4;
+      min-height: 60px;
+    }
+    .testimonial-author { 
+      margin-top: 14px; 
+      font-weight: 500; 
+      color: #7bc5e8;
+      font-size: 0.85rem;
+    }
+    .testimonial-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .testimonial-dot {
+      width: 8px;
+      height: 8px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .testimonial-dot.active {
+      background: white;
+      width: 24px;
+      border-radius: 20px;
+    }
+
+    .visiting-hours {
+      background: white;
+      border-radius: 28px;
+      padding: 28px;
+      margin: 30px 0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .visiting-hours h3 {
+      color: #0D273D;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .visiting-hours table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .visiting-hours th {
+      background: #0D273D;
+      color: white;
+      padding: 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .visiting-hours td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #e0e0e0;
+      color: #2c5a74;
+    }
+    .visiting-hours tr:last-child td {
+      border-bottom: none;
+    }
+    .visiting-hours tr:hover td {
+      background: #f5f9fc;
+    }
+    .emergency-badge {
+      background: #c0392b;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      background: white;
+      border-radius: 32px;
+      padding: 40px;
+      margin: 30px 0;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      align-items: center;
+    }
+    .about-text p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: #2c5a74;
+    }
+    .read-more-btn {
+      background: transparent;
+      border: 1.5px solid #0D273D;
+      color: #0D273D;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .read-more-btn:hover {
+      background: #0D273D;
+      color: white;
+    }
+    .about-stats {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .about-stat-item {
+      text-align: center;
+      background: #f0f7fc;
+      padding: 20px;
+      border-radius: 24px;
+      flex: 1;
+    }
+    .about-stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0D273D;
+    }
+
+    .map-container {
+      border-radius: 28px;
+      overflow: hidden;
+      margin: 30px 0;
+      height: 300px;
+    }
+
+    .footer-info {
+      background: #0D273D;
+      color: #cbdbe6;
+      padding: 32px 24px;
+      text-align: center;
+      border-radius: 32px 32px 0 0;
+      margin-top: 40px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #cbdbe6;
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: white; }
+
+    .slide-overlay canvas {
+      max-width: 500px !important;
+      width: 100% !important;
+      height: 220px !important;
+      background: rgba(255,255,240,0.12);
+      border-radius: 20px;
+      padding: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .hero-slideshow { height: 350px; }
+      .slide-overlay h2 { font-size: 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .slide-overlay canvas { height: 160px !important; }
+      .visiting-hours table { font-size: 0.85rem; }
+      .visiting-hours th, .visiting-hours td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="info-banner">
+  <span><i class="fas fa-calendar-alt"></i> <span id="liveDate"></span></span>
+  <span><i class="fas fa-map-marker-alt"></i> Doldam Hospital, Healthcare District</span>
+  <span class="emergency-ticker"><i class="fas fa-ambulance"></i> Emergency: 102 | 24/7 Available</span>
+</div>
+
+<header class="hospital-header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <h1><i class="fas fa-hospital-user"></i> Doldam Hospital</h1>
+      <p>Caring for your health with trust and technology</p>
+    </div>
+    <div class="nav-links">
+      <a href="#"><i class="fas fa-home"></i> Home</a>
+      <a href="#doctors"><i class="fas fa-user-md"></i> Doctors</a>
+      <a href="#blog"><i class="fas fa-blog"></i> Blog</a>
+      <a href="#loginPortal"><i class="fas fa-sign-in-alt"></i> Login</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="hero-slideshow" id="heroSlider">
+    <div class="slide-item active" style="background-image: linear-gradient(0deg, #0D273Daa, #0D273D88), url('hos1.jpg'); background-size: cover;">
+      <div class="slide-overlay"><h2>Welcome to Doldam Hospital</h2><p>Advanced medical care with compassionate healing.</p></div>
+    </div>
+    <div class="slide-item" style="background-image: linear-gradient(0deg, #0D273Daa, #0D273D88), url('hos2.jpg'); background-size: cover;">
+      <div class="slide-overlay"><h2>Our Achievements</h2><canvas id="achievementChart"></canvas></div>
+    </div>
+    <div class="slide-item" style="background-image: linear-gradient(0deg, #0D273Daa, #0D273D88), url('hos3.jpg'); background-size: cover;">
+      <div class="slide-overlay"><h2>Modern Infrastructure</h2><p>State-of-the-art ICUs and Operation Theatres</p></div>
+    </div>
+    <div class="arrow-btn arrow-left" id="prevSlide"><i class="fas fa-chevron-left"></i></div>
+    <div class="arrow-btn arrow-right" id="nextSlide"><i class="fas fa-chevron-right"></i></div>
+    <div class="slide-controls" id="dotsContainer"></div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-number" id="patientsCount">0</div><div class="stat-label">Happy Patients</div></div>
+    <div class="stat-card"><div class="stat-number" id="doctorsCount">0</div><div class="stat-label">Expert Doctors</div></div>
+    <div class="stat-card"><div class="stat-number" id="surgeriesCount">0</div><div class="stat-label">Surgeries</div></div>
+    <div class="stat-card"><div class="stat-number" id="awardsCount">0</div><div class="stat-label">Awards</div></div>
+  </div>
+
+  <!-- DOCTORS SECTION - UPDATED WITH YOUR NAMES AND IMAGES -->
+  <div id="doctors">
+    <div class="section-title"><i class="fas fa-star-of-life"></i> Meet Our Expert Doctors</div>
+    <div class="doctor-grid">
+      <div class="doctor-card" data-doctor='{"name":"Dr. Kim Sabu","specialty":"Cardiothoracic Surgeon","exp":"18+ years experience","achievements":"Performed 500+ successful heart surgeries. Awarded Best Surgeon 2023.","img":"sabu.jpg"}'>
+        <img src="sabu.jpg" class="doctor-img" onerror="this.src='https://placehold.co/200x200/5dade2/white?text=Doctor'"><h3>Dr. Kim Sabu</h3><p style="color:#2c9cd4;">Cardiothoracic Surgeon</p>
+      </div>
+      <div class="doctor-card" data-doctor='{"name":"Dr. Park Soo-yeon","specialty":"Senior Neurologist","exp":"15+ years","achievements":"Stroke specialist, published 30+ research papers.","img":"doctor.jpg"}'>
+        <img src="doctor.jpg" class="doctor-img" onerror="this.src='https://placehold.co/200x200/48c9b0/white?text=Doctor'"><h3>Dr. Park Soo-yeon</h3><p style="color:#2c9cd4;">Neurologist</p>
+      </div>
+      <div class="doctor-card" data-doctor='{"name":"Dr. Seo Woo Jin","specialty":"Orthopedic Surgeon","exp":"22+ years","achievements":"Minimally invasive spine surgery expert. Joint replacement specialist.","img":"seo.jpg"}'>
+        <img src="seo.jpg" class="doctor-img" onerror="this.src='https://placehold.co/200x200/f4d03f/white?text=Doctor'"><h3>Dr. Seo Woo Jin</h3><p style="color:#2c9cd4;">Orthopedic Surgeon</p>
+      </div>
+      <div class="doctor-card" data-doctor='{"name":"Dr. Lee Sung Kyung","specialty":"Pediatrician","exp":"12+ years","achievements":"Child specialist, vaccination drive leader. Best Pediatric Care Award.","img":"lee.jpg"}'>
+        <img src="lee.jpg" class="doctor-img" onerror="this.src='https://placehold.co/200x200/eb984e/white?text=Doctor'"><h3>Dr. Lee Sung Kyung</h3><p style="color:#2c9cd4;">Pediatrician</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCTOR MODAL -->
+  <div id="doctorModal" class="doctor-modal">
+    <div class="doctor-modal-content">
+      <span class="doctor-modal-close" id="closeDoctorModalBtn">&times;</span>
+      <img id="doctorModalImg" class="doctor-modal-img" src="" alt="Doctor">
+      <h2 id="doctorModalName"></h2>
+      <p id="doctorModalSpecialty" class="doctor-specialty-modal"></p>
+      <p id="doctorModalExp" class="doctor-exp"><i class="fas fa-briefcase"></i> <span></span></p>
+      <p id="doctorModalAchievements" class="doctor-achievements"><i class="fas fa-trophy"></i> <span></span></p>
+      <button class="doctor-modal-btn" id="closeDoctorBtn">Close</button>
+    </div>
+  </div>
+
+  <!-- BLOG SECTION -->
+  <div id="blog">
+    <div class="section-title"><i class="fas fa-blog"></i> Health and Wellness Blog</div>
+    <div class="blog-grid">
+      <div class="blog-card" data-blog="heart">
+        <img src="healthy1.jpg" class="blog-img" onerror="this.src='https://placehold.co/400x200/7fcdff/white?text=Heart+Health'">
+        <div class="blog-content">
+          <div class="blog-date"><i class="far fa-calendar-alt"></i> Dec 15, 2024</div>
+          <div class="blog-title">5 Tips for a Healthy Heart</div>
+          <div class="blog-excerpt">Learn about lifestyle changes that can drastically improve your cardiovascular health...</div>
+        </div>
+      </div>
+      <div class="blog-card" data-blog="winter">
+        <img src="winter1.jpg" class="blog-img" onerror="this.src='https://placehold.co/400x200/ffb347/white?text=Winter+Wellness'">
+        <div class="blog-content">
+          <div class="blog-date"><i class="far fa-calendar-alt"></i> Dec 10, 2024</div>
+          <div class="blog-title">Winter Wellness Guide</div>
+          <div class="blog-excerpt">Stay healthy this winter season with our expert-backed preventive care tips...</div>
+        </div>
+      </div>
+      <div class="blog-card" data-blog="nutrition">
+        <img src="nutrition.jpg" class="blog-img" onerror="this.src='https://placehold.co/400x200/2ecc71/white?text=Nutrition'">
+        <div class="blog-content">
+          <div class="blog-date"><i class="far fa-calendar-alt"></i> Dec 5, 2024</div>
+          <div class="blog-title">Nutrition During Recovery</div>
+          <div class="blog-excerpt">What to eat after surgery? Our dietitians share healing meal plans...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECURE ACCESS PORTAL -->
+  <div id="loginPortal">
+    <div class="section-title"><i class="fas fa-user-md"></i> Secure Access Portal</div>
+    <div class="role-grid">
+      <div class="role-card"><div class="role-icon"><i class="fas fa-stethoscope"></i></div><h3>Doctor</h3><a href="http://127.0.0.1:8000/doctor.html" class="btn-outline">Login / Register</a></div>
+      <div class="role-card"><div class="role-icon"><i class="fas fa-user-injured"></i></div><h3>Patient</h3><a href="http://127.0.0.1:8000/patients.html" class="btn-outline">Login / Register</a></div>
+      <div class="role-card"><div class="role-icon"><i class="fas fa-clipboard-list"></i></div><h3>Staff</h3><a href="http://127.0.0.1:8000/staff.html" class="btn-outline">Login / Register</a></div>
+      <div class="role-card"><div class="role-icon"><i class="fas fa-heartbeat"></i></div><h3>Nurse</h3><a href="http://127.0.0.1:8000/nurse.html" class="btn-outline">Login / Register</a></div>
+      <div class="role-card"><div class="role-icon"><i class="fas fa-user-cog"></i></div><h3>Admin</h3><a href="http://127.0.0.1:8000/admin.html" class="btn-outline">Admin Login</a></div>
+    </div>
+  </div>
+
+  <!-- IMPORTANT PAGES -->
+  <div id="pages">
+    <div class="section-title"><i class="fas fa-file-alt"></i> Important Pages</div>
+    <div class="pages-grid">
+      <div class="page-card" data-page="contact"><i class="fas fa-phone-alt"></i><p>Contact Us</p></div>
+      <div class="page-card" data-page="guide"><i class="fas fa-file-invoice"></i><p>Patient Guide</p></div>
+      <div class="page-card" data-page="insurance"><i class="fas fa-shield-alt"></i><p>Insurance</p></div>
+      <div class="page-card" data-page="careers"><i class="fas fa-briefcase"></i><p>Careers</p></div>
+      <div class="page-card" data-page="privacy"><i class="fas fa-lock"></i><p>Privacy Policy</p></div>
+    </div>
+  </div>
+
+  <!-- ANNOUNCEMENTS -->
+  <div class="section-title"><i class="fas fa-newspaper"></i> Announcements</div>
+  <div class="notice-scroll" id="noticeScroll">
+    <div class="notice-card" data-announcement="camp"><img src="camp.jpg" class="notice-img" onerror="this.src='https://placehold.co/400x200/7fcdff/white?text=Camp'"><div class="notice-text"><h4>Free Health Camp</h4><p>Every Friday, 9am-2pm</p></div></div>
+    <div class="notice-card" data-announcement="vaccine"><img src="vaccine.jpg" class="notice-img" onerror="this.src='https://placehold.co/400x200/ffb347/white?text=Vaccine'"><div class="notice-text"><h4>Vaccination Drive</h4><p>COVID Booster available</p></div></div>
+    <div class="notice-card" data-announcement="emergency"><img src="emergency.jpg" class="notice-img" onerror="this.src='https://placehold.co/400x200/e67e22/white?text=Emergency'"><div class="notice-text"><h4>24/7 Emergency</h4><p>Level-1 trauma care</p></div></div>
+    <div class="notice-card" data-announcement="blood"><img src="blood.jpg" class="notice-img" onerror="this.src='https://placehold.co/400x200/e84393/white?text=Blood'"><div class="notice-text"><h4>Blood Donation</h4><p>20th December, register now</p></div></div>
+    <div class="notice-card" data-announcement="specialist"><img src="clinic.jpg" class="notice-img" onerror="this.src='https://placehold.co/400x200/3498db/white?text=Specialist'"><div class="notice-text"><h4>Specialist OPD</h4><p>Extended hours for Cardiology</p></div></div>
+    <div class="notice-card" data-announcement="lab"><img src="lab.jpg" class="notice-img" onerror="this.src='https://placehold.co/400x200/9b59b6/white?text=Lab'"><div class="notice-text"><h4>24/7 Lab Services</h4><p>Full diagnostics available</p></div></div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div class="testimonial-slider">
+    <div class="testimonial-text" id="testimonialText">"Excellent care! The doctors and staff are incredibly supportive."</div>
+    <div class="testimonial-author" id="testimonialAuthor">- Priya Sharma</div>
+    <div class="testimonial-dots" id="testimonialDots">
+      <div class="testimonial-dot active" data-index="0"></div>
+      <div class="testimonial-dot" data-index="1"></div>
+      <div class="testimonial-dot" data-index="2"></div>
+    </div>
+  </div>
+
+  <!-- VISITING HOURS -->
+  <div class="visiting-hours">
+    <h3><i class="fas fa-clock"></i> OPD Visiting Hours</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Timing</th>
+          <th>Special Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><i class="fas fa-calendar-week"></i> Monday - Saturday</td>
+          <td><i class="fas fa-hourglass-half"></i> 9:00 AM - 6:00 PM</td>
+          <td>Regular OPD</td>
+        </tr>
+        <tr>
+          <td><i class="fas fa-calendar-day"></i> Sunday</td>
+          <td><i class="fas fa-hourglass-half"></i> 10:00 AM - 2:00 PM</td>
+          <td><span class="emergency-badge">Emergency Only</span></td>
+        </tr>
+        <tr>
+          <td><i class="fas fa-ambulance"></i> Emergency</td>
+          <td><i class="fas fa-infinity"></i> 24/7 Available</td>
+          <td><span class="emergency-badge">Always Open</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ABOUT US -->
+  <div id="about">
+    <div class="section-title"><i class="fas fa-heartbeat"></i> About Doldam Hospital</div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><strong>Established in 2005</strong>, Doldam Hospital has grown into a premier healthcare institution known for its patient-first approach and cutting-edge medical technology.</p>
+        <p>We offer comprehensive medical services across 30+ specialties, with a dedicated team of over 150 doctors and 500 support staff.</p>
+        <p>Accredited by NABH and certified with ISO 9001:2024, we continuously strive for excellence in clinical outcomes and patient satisfaction.</p>
+        <button class="read-more-btn" id="moreAboutBtn"><i class="fas fa-arrow-right"></i> More About Doldam</button>
+      </div>
+      <div class="about-stats">
+        <div class="about-stat-item"><div class="about-stat-number">30+</div><div>Specialties</div></div>
+        <div class="about-stat-item"><div class="about-stat-number">500+</div><div>Support Staff</div></div>
+        <div class="about-stat-item"><div class="about-stat-number">24/7</div><div>Emergency Care</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-container">
+    <iframe src="https://maps.google.com/maps?q=hospital&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+  </div>
+
+  <!-- CONTACT HELPLINE -->
+  <div style="background: white; border-radius: 28px; padding: 24px; margin: 30px 0; text-align: center;">
+    <h3><i class="fas fa-headset"></i> 24/7 Helpline: +91 1800 123 4567</h3>
+    <p>Email: care@doldamhospital.com | Emergency: 102</p>
+  </div>
+</main>
+
+<footer class="footer-info">
+  <div class="footer-links">
+    <a href="#">Home</a>
+    <a href="#about">About Us</a>
+    <a href="#doctors">Doctors</a>
+    <a href="#blog">Blog</a>
+    <a href="#pages">Important Pages</a>
+    <a href="#loginPortal">Login</a>
+  </div>
+  <p>&copy; 2025 Doldam Hospital — Trust and Technology for Better Tomorrow</p>
+</footer>
+
+<!-- UNIVERSAL MODAL FOR BLOG, PAGES, ANNOUNCEMENTS -->
+<div id="universalModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center;">
+  <div style="background: white; max-width: 700px; width: 90%; max-height: 85vh; overflow-y: auto; border-radius: 32px; padding: 32px; position: relative;">
+    <span style="position: absolute; top: 20px; right: 24px; font-size: 28px; cursor: pointer; color: #666;" id="closeUniversalModalBtn">&times;</span>
+    <div id="modalDynamicContent"></div>
+  </div>
+</div>
+
+<script>
+  // Live Date
+  function updateDate() {
+    document.getElementById('liveDate').innerText = new Date().toLocaleDateString('en-US', { 
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+    });
+  }
+  updateDate();
+
+  // Counter Animation
+  function animateCounter(elementId, targetValue) {
+    let current = 0;
+    let increment = Math.ceil(targetValue / 60);
+    let interval = setInterval(function() {
+      current += increment;
+      if (current >= targetValue) {
+        current = targetValue;
+        clearInterval(interval);
+      }
+      document.getElementById(elementId).innerText = current.toLocaleString();
+    }, 25);
+  }
+  animateCounter('patientsCount', 24580);
+  animateCounter('doctorsCount', 156);
+  animateCounter('surgeriesCount', 8750);
+  animateCounter('awardsCount', 32);
+
+  // Slideshow
+  let slides = document.querySelectorAll('.slide-item');
+  let currentIdx = 0;
+  let autoInterval;
+  let totalSlides = slides.length;
+  function goToSlide(idx) {
+    slides.forEach(function(s, i) { s.classList.remove('active'); });
+    slides[idx].classList.add('active');
+    currentIdx = idx;
+    updateDots();
+    if (idx === 1) setTimeout(initChart, 100);
+  }
+  function updateDots() {
+    let dots = document.querySelectorAll('.dot-nav');
+    dots.forEach(function(d, i) { if (i === currentIdx) d.classList.add('active-dot'); else d.classList.remove('active-dot'); });
+  }
+  function nextSlide() { goToSlide((currentIdx + 1) % totalSlides); }
+  function prevSlide() { goToSlide((currentIdx - 1 + totalSlides) % totalSlides); }
+  function startAuto() { autoInterval = setInterval(nextSlide, 4000); }
+  function resetAuto() { clearInterval(autoInterval); startAuto(); }
+  document.getElementById('prevSlide').onclick = function() { prevSlide(); resetAuto(); };
+  document.getElementById('nextSlide').onclick = function() { nextSlide(); resetAuto(); };
+  function initChart() {
+    let canvas = document.getElementById('achievementChart');
+    if (canvas && !canvas.chartDone) {
+      new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['Patients Treated', 'Operations', 'Expert Doctors', 'Nursing Staff', 'Awards'],
+          datasets: [{ label: 'Our Achievements', data: [24580, 8750, 156, 320, 32], backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#ef5350'], borderRadius: 8 }]
+        },
+        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'top', labels: { color: 'white', font: { size: 12 } } }, tooltip: { backgroundColor: '#0D273D' } },
+          scales: { y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.2)' } }, x: { ticks: { color: 'white', font: { size: 11 } }, grid: { display: false } } }
+        }
+      });
+      canvas.chartDone = true;
+    }
+  }
+  let dotsContainer = document.getElementById('dotsContainer');
+  for (let i = 0; i < totalSlides; i++) {
+    let dot = document.createElement('div');
+    dot.classList.add('dot-nav');
+    if (i === 0) dot.classList.add('active-dot');
+    dot.onclick = (function(index) { return function() { goToSlide(index); resetAuto(); }; })(i);
+    dotsContainer.appendChild(dot);
+  }
+  goToSlide(0);
+  startAuto();
+
+  // ========== DOCTOR MODAL FUNCTIONALITY ==========
+  const doctorModal = document.getElementById('doctorModal');
+  const doctorModalImg = document.getElementById('doctorModalImg');
+  const doctorModalName = document.getElementById('doctorModalName');
+  const doctorModalSpecialty = document.getElementById('doctorModalSpecialty');
+  const doctorModalExp = document.getElementById('doctorModalExp');
+  const doctorModalAchievements = document.getElementById('doctorModalAchievements');
+  const closeDoctorModalBtn = document.getElementById('closeDoctorModalBtn');
+  const closeDoctorBtn = document.getElementById('closeDoctorBtn');
+
+  function showDoctorModal(name, specialty, exp, achievements, img) {
+    doctorModalName.innerText = name;
+    doctorModalSpecialty.innerText = specialty;
+    doctorModalExp.innerHTML = '<i class="fas fa-briefcase"></i> ' + exp;
+    doctorModalAchievements.innerHTML = '<i class="fas fa-trophy"></i> ' + achievements;
+    doctorModalImg.src = img;
+    doctorModal.style.display = 'flex';
+  }
+
+  function closeDoctorModal() {
+    doctorModal.style.display = 'none';
+  }
+
+  closeDoctorModalBtn.onclick = closeDoctorModal;
+  closeDoctorBtn.onclick = closeDoctorModal;
+  window.onclick = function(e) { if (e.target === doctorModal) closeDoctorModal(); };
+
+  // Attach click handlers to doctor cards using data attribute
+  document.querySelectorAll('.doctor-card').forEach(card => {
+    card.onclick = function() {
+      const data = this.getAttribute('data-doctor');
+      if (data) {
+        const doctor = JSON.parse(data);
+        showDoctorModal(doctor.name, doctor.specialty, doctor.exp, doctor.achievements, doctor.img);
+      }
+    };
+  });
+
+  // About Modal
+  function closeMoreAbout() { 
+    const moreModal = document.getElementById('moreAboutModal');
+    if (moreModal) moreModal.style.display = 'none'; 
+  }
+  
+  const moreAboutBtn = document.getElementById('moreAboutBtn');
+  if (moreAboutBtn) {
+    moreAboutBtn.onclick = function() { 
+      const moreModal = document.getElementById('moreAboutModal');
+      if (moreModal) moreModal.style.display = 'flex'; 
+    };
+  }
+
+  // Testimonials
+  const testimonialData = [
+    { text: "Excellent care! The doctors and staff are incredibly supportive.", author: "- Priya Sharma" },
+    { text: "Advanced technology and very clean environment. Highly recommended!", author: "- Rajesh Mehta" },
+    { text: "The emergency team saved my father's life. Forever grateful.", author: "- Sneha Kapoor" }
+  ];
+  let currentTestimonial = 0;
+  const testimonialTextEl = document.getElementById('testimonialText');
+  const testimonialAuthorEl = document.getElementById('testimonialAuthor');
+  const testimonialDots = document.querySelectorAll('.testimonial-dot');
+  function updateTestimonial(index) {
+    currentTestimonial = index;
+    testimonialTextEl.textContent = testimonialData[index].text;
+    testimonialAuthorEl.textContent = testimonialData[index].author;
+    testimonialDots.forEach((dot, i) => { if (i === index) dot.classList.add('active'); else dot.classList.remove('active'); });
+  }
+  function nextTestimonial() { updateTestimonial((currentTestimonial + 1) % testimonialData.length); }
+  testimonialDots.forEach((dot, i) => { dot.addEventListener('click', function() { updateTestimonial(i); clearInterval(testimonialInterval); testimonialInterval = setInterval(nextTestimonial, 5000); }); });
+  let testimonialInterval = setInterval(nextTestimonial, 5000);
+
+  // ========== UNIVERSAL MODAL FOR BLOG, PAGES, ANNOUNCEMENTS ==========
+  const universalModal = document.getElementById('universalModal');
+  const modalContentDiv = document.getElementById('modalDynamicContent');
+  const closeUniversalModalBtn = document.getElementById('closeUniversalModalBtn');
+  
+  function openUniversalModal(title, htmlContent, imgSrc = null) {
+    let imgHtml = imgSrc ? `<img src="${imgSrc}" style="width:100%; border-radius:20px; margin:15px 0;" onerror="this.src='https://placehold.co/600x300/0D273D/white?text=Doldam'">` : '';
+    modalContentDiv.innerHTML = `<h2 style="color:#0D273D;"><i class="fas fa-info-circle"></i> ${title}</h2>${imgHtml}${htmlContent}`;
+    universalModal.style.display = 'flex';
+  }
+  function closeUniversalModal() { universalModal.style.display = 'none'; }
+  if (closeUniversalModalBtn) closeUniversalModalBtn.onclick = closeUniversalModal;
+  window.addEventListener('click', (e) => { if (e.target === universalModal) closeUniversalModal(); });
+
+  // BLOG CONTENT DATA
+  const blogContents = {
+    heart: { title: "5 Tips for a Healthy Heart", content: `<h3>1. Eat a Heart-Healthy Diet</h3><p>Include plenty of fruits, vegetables, whole grains, and lean proteins.</p><h3>2. Stay Physically Active</h3><p>Aim for at least 150 minutes of moderate exercise per week.</p><h3>3. Manage Stress Effectively</h3><p>Chronic stress can increase blood pressure. Practice meditation.</p><h3>4. Quit Smoking and Limit Alcohol</h3><p>Smoking damages blood vessels.</p><h3>5. Regular Health Screenings</h3><p>Monitor blood pressure, cholesterol, and blood sugar levels regularly.</p>` },
+    winter: { title: "Winter Wellness Guide", content: `<h3>Get Your Flu Shot</h3><p>Annual flu vaccination is your best defense.</p><h3>Boost Your Immunity</h3><p>Include Vitamin C-rich foods, zinc, and Vitamin D.</p><h3>Stay Hydrated</h3><p>Drink warm herbal teas and water.</p><h3>Dress in Layers</h3><p>Protect yourself from cold stress.</p><h3>Practice Good Hygiene</h3><p>Wash hands frequently for 20 seconds.</p>` },
+    nutrition: { title: "Nutrition During Recovery", content: `<h3>Protein for Tissue Repair</h3><p>Include lean meats, fish, eggs, dairy, beans, and legumes.</p><h3>Vitamins and Minerals</h3><p>Vitamin C supports collagen formation.</p><h3>Stay Hydrated</h3><p>Drink 8-10 glasses of water daily.</p><h3>Foods to Avoid</h3><p>Limit processed foods, excess sugar, and alcohol.</p><h3>Small, Frequent Meals</h3><p>Eat 5-6 small meals instead of 3 large ones.</p>` }
+  };
+
+  // PAGE CONTENT DATA
+  const pageContents = {
+    contact: { title: "Contact Us", content: `<p><strong>📞 Emergency Helpline:</strong> 102 (24/7)</p><p><strong>📱 Appointment Booking:</strong> +91 1800 123 4567</p><p><strong>✉️ Email:</strong> care@doldamhospital.com</p><p><strong>📍 Address:</strong> 123, Healthcare District, Medical City, Doldam - 560001</p>` },
+    guide: { title: "Patient Guide", content: `<h3>Registration Process</h3><p>Visit reception or register online through Patient Portal.</p><h3>Visiting Hours</h3><p>General Wards: 4PM-7PM | ICU: 11AM-12PM & 5PM-6PM</p><h3>What to Bring</h3><p>Medical records, medication list, doctor referrals.</p>` },
+    insurance: { title: "Insurance & Billing", content: `<h3>Accepted Insurance Providers</h3><p>Star Health, New India Assurance, ICICI Lombard, HDFC Ergo, Bajaj Allianz, PMJAY, CGHS, ESI.</p><h3>Cashless Treatment</h3><p>Inform insurance desk at admission for cashless processing.</p>` },
+    careers: { title: "Careers at Doldam Hospital", content: `<h3>Current Openings</h3><p><strong>Doctors:</strong> Cardiologists, Neurologists, Pediatricians<br><strong>Nurses:</strong> Staff Nurses, ICU Nurses<br><strong>Administration:</strong> Patient Relations, Billing Executives</p><h3>How to Apply</h3><p>Send CV to hr@doldamhospital.com</p>` },
+    privacy: { title: "Privacy Policy", content: `<h3>Information We Collect</h3><p>Personal information including name, contact details, medical history, insurance information.</p><h3>Data Protection</h3><p>We follow HIPAA guidelines. Your data is encrypted.</p>` }
+  };
+
+  // ANNOUNCEMENT CONTENT DATA
+  const announcementContents = {
+    camp: { title: "Free Health Camp", content: `<p><strong>Date:</strong> Every Friday<br><strong>Time:</strong> 9:00 AM - 2:00 PM<br><strong>Location:</strong> Doldam Hospital OPD Block</p><p>Services: General check-up, BP screening, Blood sugar test, BMI analysis.</p>` },
+    vaccine: { title: "COVID-19 Vaccination Drive", content: `<p>Free COVID-19 booster doses available for eligible individuals above 18 years.</p><p><strong>Timing:</strong> Monday-Saturday, 10AM-4PM<br><strong>Location:</strong> Vaccination Center</p>` },
+    emergency: { title: "24/7 Emergency Services", content: `<p><strong>Level-1 Trauma Center</strong> with:</p><ul><li>Dedicated emergency physicians</li><li>Advanced life support ambulances</li><li>Immediate ICU and OT access</li><li>24/7 pharmacy and lab</li></ul><p><strong>Emergency Helpline:</strong> 102</p>` },
+    blood: { title: "Blood Donation Camp", content: `<p><strong>Date:</strong> December 20, 2024<br><strong>Time:</strong> 9AM-5PM<br><strong>Venue:</strong> Doldam Hospital Auditorium</p><p>One donation can save three lives.</p>` },
+    specialist: { title: "New Specialist OPD Timings", content: `<p>Extended OPD hours for Cardiology and Neurology departments.</p><p><strong>Cardiology:</strong> 8AM-8PM (Mon-Sat)<br><strong>Neurology:</strong> 8AM-8PM (Mon-Sat)</p>` },
+    lab: { title: "24/7 Laboratory Services", content: `<p>Our lab now operates 24/7 with same-day reports.</p><p><strong>Services:</strong> Blood tests, Urine analysis, Microbiology, Pathology, Radiology</p><p>Emergency samples processed within 1 hour.</p>` }
+  };
+
+  // Attach click handlers for blog, pages, announcements
+  document.querySelectorAll('.blog-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const blogKey = card.getAttribute('data-blog');
+      const blog = blogContents[blogKey];
+      if (blog) openUniversalModal(blog.title, blog.content, card.querySelector('img')?.src);
+    });
+  });
+
+  document.querySelectorAll('.page-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const pageKey = card.getAttribute('data-page');
+      const page = pageContents[pageKey];
+      if (page) openUniversalModal(page.title, page.content);
+    });
+  });
+
+  document.querySelectorAll('.notice-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const annKey = card.getAttribute('data-announcement');
+      const announcement = announcementContents[annKey];
+      if (announcement) openUniversalModal(announcement.title, announcement.content, card.querySelector('img')?.src);
+    });
+  });
+
+  // Add More About Modal
+  const moreAboutModalHTML = `<div id="moreAboutModal" class="doctor-modal"><div class="doctor-modal-content"><span style="float:right; font-size:28px; cursor:pointer;" onclick="closeMoreAbout()">&times;</span><h2 style="color:#0D273D;">Our Legacy of Care</h2><img src="hos1.jpg" style="width:100%; border-radius:20px; margin:15px 0;"><p>Doldam Hospital was founded in 2005. Over 18 years, we have treated 2.5 lakh+ patients and performed 15,000+ successful surgeries.</p><p>First hospital in region to introduce robotic surgery and telemedicine services.</p><button class="doctor-modal-btn" onclick="closeMoreAbout()">Close</button></div></div>`;
+  document.body.insertAdjacentHTML('beforeend', moreAboutModalHTML);
+</script>
+</body>
+</html>
