@@ -31,10 +31,3 @@ Here is a brief overview of the key files in the repository:
 *   `task.py` - Python script (likely used for backend logic, database seeding, or specific hospital tasks).
 *   `*.jpg / *.webp` - Images and icons used throughout the UI.
 
-##  How to Run the Project
-
-Since this is primarily a frontend-focused project, you can run it easily:
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/MaimunaTusSabaTasfia/Hospital-Management-Project.git
